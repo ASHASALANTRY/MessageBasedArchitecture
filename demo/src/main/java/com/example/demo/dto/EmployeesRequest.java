@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.dto;
 
 import com.example.demo.dto.CreateEmployeeRequest;
 import lombok.Data;

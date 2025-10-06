@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ApiResponse {
-    Response response;
-    String errorMessage;
+    Object Data;
+    Exception Error;
 }

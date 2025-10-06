@@ -4,7 +4,7 @@ import com.example.demo.Repository.BasicDetailRepository;
 import com.example.demo.dto.CreateEmployeeRequest;
 import com.example.demo.dto.StatusResponse;
 import com.example.demo.entity.BasicDetails;
-import com.example.demo.entity.EmployeesRequest;
+import com.example.demo.dto.EmployeesRequest;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.IntegrationException;
 import com.example.demo.service.CacheHelperService;

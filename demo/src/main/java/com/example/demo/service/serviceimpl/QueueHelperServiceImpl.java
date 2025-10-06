@@ -5,8 +5,7 @@ import com.azure.messaging.servicebus.ServiceBusException;
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
 import com.example.demo.dto.QueueMessageBody;
-import com.example.demo.entity.BasicDetails;
-import com.example.demo.entity.EmployeesRequest;
+import com.example.demo.dto.EmployeesRequest;
 import com.example.demo.exception.IntegrationException;
 import com.example.demo.service.QueueHelperService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,16 +21,9 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class QueueHelperServiceImpl implements QueueHelperService {
     private final ServiceBusClientBuilder serviceBusClientBuilder;
-    @Value("${servicebus.queue.sample}")
-    private String sampleQueueName;
     @Value("${servicebus.queue.employeeprocess}")
     private String employeeProcessQueueName;
     private static final Logger log = LoggerFactory.getLogger(QueueHelperServiceImpl.class);
-
-    @Override
-    public void sendEmployeeDetailsToQueue(BasicDetails basicDetails) {
-        sendMessageToQueue(sampleQueueName,basicDetails);
-    }
 
     @Override
     public void sendStatusMessageToQueue(EmployeesRequest employeesRequest, String key) {

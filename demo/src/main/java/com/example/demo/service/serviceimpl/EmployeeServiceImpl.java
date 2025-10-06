@@ -3,11 +3,10 @@ package com.example.demo.service.serviceimpl;
 import com.example.demo.Repository.BasicDetailRepository;
 import com.example.demo.dto.StatusResponse;
 import com.example.demo.entity.BasicDetails;
-import com.example.demo.entity.EmployeesRequest;
+import com.example.demo.dto.EmployeesRequest;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.CacheOperationException;
 import com.example.demo.exception.IntegrationException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.CacheHelperService;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.QueueHelperService;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,30 +25,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final BasicDetailRepository basicDetailRepository;
-
     private final QueueHelperService queueHelperService;
-
     private final CacheHelperService cacheHelperService;
     private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
-
     @Value("${redis.status.url}")
     private String statusUrl;
 
     @Override
     public BasicDetails getEmployeeDetails(UUID employeeId) {
 
-        try {
         BasicDetails basicDetails = basicDetailRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new BadRequestException("Employee not found with this employeeId: " + employeeId));
-
-
             return basicDetails;
-        } catch (Exception e) {
-            if (e instanceof IntegrationException)
-                throw e;
-            throw new BadRequestException("Unexpected error while processing employee details", e);
-        }
-
 
     }
 
@@ -92,7 +78,4 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new BadRequestException("Unexpected error while fetching data from cache", exception);
         }
     }
-
-
-
 }

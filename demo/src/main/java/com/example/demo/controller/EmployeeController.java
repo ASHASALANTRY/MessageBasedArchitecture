@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ApiResponse;
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.BasicDetails;
-import com.example.demo.entity.EmployeesRequest;
+import com.example.demo.dto.EmployeesRequest;
 import com.example.demo.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 @Tag(name = "Employee Details", description = "Employee Details")
 @RequiredArgsConstructor
