@@ -19,20 +19,17 @@ public class ServiceBusConfig {
     private String namespace;
     @Value("${spring.profiles.active}")
     private String profile;
+
     @Bean
-    ServiceBusClientBuilder serviceBusConfiguration(){
+    ServiceBusClientBuilder serviceBusConfiguration() {
         // create a token using the default Azure credential
         DefaultAzureCredential credential = new DefaultAzureCredentialBuilder()
                 .build();
-
-
-
         if (namespace == null || namespace.isBlank()) {
             throw new IntegrationException("service bus namespace not found");
         }
-        if(profile.equals("local"))
+        if (profile.equals("local"))
             return new ServiceBusClientBuilder().connectionString(serviceBusConnection);
-
         return new ServiceBusClientBuilder().fullyQualifiedNamespace(namespace)
                 .credential(credential);
 

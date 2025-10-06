@@ -8,8 +8,6 @@ import java.util.UUID;
 
 public interface EmployeeService {
     public BasicDetails getEmployeeDetails(UUID employeeId);
-
     public EmployeesRequest addEmployeeDetails(EmployeesRequest employeesRequest);
-
     public StatusResponse getStatus(String key);
 }

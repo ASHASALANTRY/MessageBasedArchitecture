@@ -19,6 +19,7 @@ public class CacheHelperServiceImpl implements CacheHelperService {
     private String employeeProcessQueueName;
     private final StringRedisTemplate stringRedisTemplate;
     private static final Logger log = LoggerFactory.getLogger(CacheHelperServiceImpl.class);
+
     @Override
     public void addMessageStatusToCache(String key, String messageStatus) {
         try {
@@ -28,21 +29,21 @@ public class CacheHelperServiceImpl implements CacheHelperService {
                 log.info("added key to redis: {}", key);
                 log.info("value for key {} is: {}", key, ops.get(key));
             }
-        }catch (RedisConnectionException exception){
-            throw new CacheOperationException("Failed to connect to Redis server",exception);
-        }catch (RedisException exception){
-            throw new CacheOperationException("Failed to perform Redis operation",exception);
+        } catch (RedisConnectionException exception) {
+            throw new CacheOperationException("Failed to connect to Redis server", exception);
+        } catch (RedisException exception) {
+            throw new CacheOperationException("Failed to perform Redis operation", exception);
         }
     }
 
     @Override
     public String getDataFromCache(String key) {
-        try{
-        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
-        return ops.get(key);
-        }catch (RedisConnectionException exception) {
+        try {
+            ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+            return ops.get(key);
+        } catch (RedisConnectionException exception) {
             throw new CacheOperationException("Failed to connect to Redis server", exception);
-        }catch (RedisException exception){
+        } catch (RedisException exception) {
             throw new CacheOperationException("Failed to access data from redis", exception);
         }
     }

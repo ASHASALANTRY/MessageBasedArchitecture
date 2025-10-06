@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
 @Tag(name = "Employee Details", description = "Employee Details")
 @RequiredArgsConstructor
 @RestController
@@ -23,31 +24,32 @@ public class EmployeeController {
     @Operation(summary = "get employee details", description = "fetch employee details", tags = {"Employee Details"})
     @ApiResponses(value = {@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "employee details received")})
     public ResponseEntity<ApiResponse> getEmployeeDetails(@RequestParam(name = "employeeId") UUID employeeId) {
-        ApiResponse apiResponse=new ApiResponse();
-        BasicDetails basicDetails=employeeService.getEmployeeDetails(employeeId);
-            apiResponse.setData(basicDetails);
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        ApiResponse apiResponse = new ApiResponse();
+        BasicDetails basicDetails = employeeService.getEmployeeDetails(employeeId);
+        apiResponse.setData(basicDetails);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
     }
+
     @PostMapping("/add-employee")
     @Operation(summary = "add employee details", description = "save employee details and update status in cache", tags = {"Employee Details"})
     @ApiResponses(value = {@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "employee details stored successfully")})
-    public ResponseEntity<ApiResponse> addEmployeeDetails(@RequestBody EmployeesRequest employees){
-        ApiResponse apiResponse =new ApiResponse();
+    public ResponseEntity<ApiResponse> addEmployeeDetails(@RequestBody EmployeesRequest employees) {
+        ApiResponse apiResponse = new ApiResponse();
         apiResponse.setData(employeeService.addEmployeeDetails(employees));
 
-        return new ResponseEntity<>(apiResponse,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.ACCEPTED);
     }
 
 
     @GetMapping("/get-status")
     @Operation(summary = "get status", description = "fetch status from cache", tags = {"Employee Details"})
     @ApiResponses(value = {@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "status received")})
-    public ResponseEntity<ApiResponse> getStatus(@RequestParam(name = "key") String key){
-        ApiResponse apiResponse =new ApiResponse();
+    public ResponseEntity<ApiResponse> getStatus(@RequestParam(name = "key") String key) {
+        ApiResponse apiResponse = new ApiResponse();
         apiResponse.setData(employeeService.getStatus(key));
 
-        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 }

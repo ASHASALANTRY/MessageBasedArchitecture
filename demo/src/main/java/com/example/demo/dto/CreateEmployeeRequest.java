@@ -10,15 +10,10 @@ import java.sql.Timestamp;
 public class CreateEmployeeRequest {
 
     private String firstName;
-
     private String lastName;
-
     private Character gender; // Could be replaced with Enum later
-
     private Timestamp dob;
-
     private String email;
-
     private String phone;
     private Boolean isProcessed;
 }

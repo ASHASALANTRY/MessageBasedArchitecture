@@ -36,8 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         BasicDetails basicDetails = basicDetailRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new BadRequestException("Employee not found with this employeeId: " + employeeId));
-            return basicDetails;
-
+        return basicDetails;
     }
 
     @Override

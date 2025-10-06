@@ -9,6 +9,5 @@ import java.util.List;
 public class EmployeesRequest {
     List<CreateEmployeeRequest> employees;
     Boolean isProcessed;
-
     String statusUrl;
 }

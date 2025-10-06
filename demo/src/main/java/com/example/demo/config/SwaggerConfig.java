@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
     @Autowired
@@ -29,7 +30,6 @@ public class SwaggerConfig {
                         .addSecuritySchemes("Authorization",
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer")
                                         .bearerFormat("JWT")))
-
                 .security(List.of(new SecurityRequirement().addList("Authorization")));
     }
 }

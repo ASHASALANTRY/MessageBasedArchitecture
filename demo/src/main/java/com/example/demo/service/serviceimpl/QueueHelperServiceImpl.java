@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+
 @Service
 @RequiredArgsConstructor
 public class QueueHelperServiceImpl implements QueueHelperService {
@@ -31,9 +32,10 @@ public class QueueHelperServiceImpl implements QueueHelperService {
         messageBody.setEmployees(employeesRequest.getEmployees());
         messageBody.setIsProcessed(employeesRequest.getIsProcessed());
         messageBody.setRedisStatusKey(key);
-        sendMessageToQueue(employeeProcessQueueName,messageBody);
+        sendMessageToQueue(employeeProcessQueueName, messageBody);
     }
-    public void sendMessageToQueue(String queueName, Object payload){
+
+    public void sendMessageToQueue(String queueName, Object payload) {
         try (ServiceBusSenderClient sender = serviceBusClientBuilder
                 .sender()
                 .queueName(queueName)
@@ -44,7 +46,7 @@ public class QueueHelperServiceImpl implements QueueHelperService {
             log.debug("Compact JSON to publish ({}): {}", queueName, jsonString);
             ServiceBusMessage serviceBusMessage = new ServiceBusMessage(jsonString.getBytes(StandardCharsets.UTF_8));
             sender.sendMessage(serviceBusMessage);
-        }catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             throw new IntegrationException("Failed to serialize message body for Service Bus.", e);
         } catch (ServiceBusException e) {
             throw new IntegrationException("Failed to publish to Service Bus queue: " + employeeProcessQueueName, e);
