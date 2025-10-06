@@ -1,6 +1,7 @@
-# 🧩 Employee Onboarding – Message-Based Architecture (Spring Boot + Azure)
+# 🧩 Message-Based Architecture (Spring Boot + Azure)
 
-This project demonstrates an **event-driven employee onboarding system** built on **Azure** using **Spring Boot**, **Azure Service Bus**, **PostgreSQL**, and **Redis**.  
+This project demonstrates an **event-driven employee Information system** built on **Azure** using **Spring Boot**, **Azure Service Bus**, **PostgreSQL**, and **Redis**. 
+It acts as the **sender/producer** service in a distributed message-based system.
 All services except Redis use **Azure Managed Identity** for secure, passwordless authentication.  
 The REST API is hosted on an **Azure Web App** protected via **platform-based Azure AD authentication**, ensuring that only authenticated users or service principals can access the endpoints.
 
@@ -36,7 +37,7 @@ The system implements a **message-based asynchronous architecture** designed for
    - Status is immediately cached in Redis as `"processing"`.
 
 2. **Queue Consumption**
-   - `ServiceBusIntegrationService` listens for new messages.
+   - `Service Bus Receiver` listens for new messages.
    - The payload is processed and persisted in PostgreSQL via `BasicDetailRepository`.
    - If successful, Redis is updated as `"processed"`; otherwise `"failed"`.
 
@@ -54,7 +55,7 @@ The system implements a **message-based asynchronous architecture** designed for
 
 | Package | Purpose |
 |----------|----------|
-| `controller` | Contains `EmployeeController` and `DemoController` for REST APIs |
+| `controller` | Contains `EmployeeController` for REST APIs |
 | `service` | Declares core business contracts (`EmployeeService`, `CacheHelperService`, etc.) |
 | `service.serviceimpl` | Implements service logic including queue and cache operations |
 | `config` | Azure and Spring configurations (`ServiceBusConfig`, `DbConfig`, `RedisConfig`, `SwaggerConfig`) |
@@ -69,7 +70,7 @@ The system implements a **message-based asynchronous architecture** designed for
 
 | Layer | Technology | Description |
 |--------|-------------|-------------|
-| **API Layer** | Spring Boot (Java 21) | Exposes REST endpoints (`/api/employees`, `/api/status/{id}`) |
+| **API Layer** | Spring Boot (Java 21) | Exposes REST endpoints (`/add-employee`, `/get-status?key=?`) |
 | **Messaging** | Azure Service Bus Queues | Handles asynchronous message flow |
 | **Persistence** | Azure PostgreSQL | Secure data storage with token-based authentication |
 | **Cache** | Azure Redis Cache | Temporary cache for intermediate status tracking |
