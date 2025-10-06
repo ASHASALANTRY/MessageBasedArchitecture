@@ -45,7 +45,7 @@ The system implements a **message-based asynchronous architecture** designed for
    - This enables other systems (reporting, audit, HR sync) to react asynchronously.
 
 4. **Status Tracking**
-   - Clients can query the employee status via `/api/status/{employeeId}`.
+   - Clients can query the employee status via `/get-status?key=`.
    - Redis acts as a lightweight, fast-access layer for intermediate status updates.
 
 ---
@@ -74,7 +74,6 @@ The system implements a **message-based asynchronous architecture** designed for
 | **Persistence** | Azure PostgreSQL | Secure data storage with token-based authentication |
 | **Cache** | Azure Redis Cache | Temporary cache for intermediate status tracking |
 | **Security** | Azure Managed Identity + Azure AD | Passwordless authentication and API protection |
-| **CI/CD** | Azure DevOps (Gradle-based) | Automated build and deployment |
 | **Docs** | Swagger UI | Auto-generated interactive documentation |
 
 ---
