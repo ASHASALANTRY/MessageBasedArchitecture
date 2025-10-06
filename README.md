@@ -10,7 +10,7 @@ The REST API is hosted on an **Azure Web App** protected via **platform-based Az
 
 The system implements a **message-based asynchronous architecture** designed for scalability, reliability, and loose coupling between producer and consumer components.
 
-![System Architecture](./systemdiagram.jpg)
+![System Architecture](./demo/systemdiagram.jpg)
 
 ---
 
