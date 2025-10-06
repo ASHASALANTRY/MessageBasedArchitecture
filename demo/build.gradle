@@ -1,0 +1,65 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.5'
+
+//	id 'org.springframework.boot' version '3.5.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.microsoft.azure.azurefunctions' version '1.16.1'
+
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+ext {
+	set('springCloudAzureVersion', "5.23.0")               // or latest
+}
+dependencyManagement {
+	imports {
+		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+	}
+}
+dependencies {
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+	implementation 'com.azure:azure-messaging-servicebus:7.17.6'
+	implementation "com.microsoft.azure:applicationinsights-logging-logback:2.6.4"
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'org.postgresql:postgresql'
+
+	implementation 'com.azure:azure-identity'
+
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// Spring Cloud Azure Redis (5.x uses the Lettuce variant)
+	implementation 'com.azure.spring:spring-cloud-azure-starter-data-redis-lettuce'
+
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+	testImplementation 'org.assertj:assertj-core:3.26.3' // optional but nice
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0"
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

@@ -1,0 +1,19 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AI" class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender">
+        <!-- Connection string will be read from environment/application settings -->
+        <connectionString>${APPLICATIONINSIGHTS_CONNECTION_STRING}</connectionString>
+        <maxTelemetryItemsPerSecond>20</maxTelemetryItemsPerSecond>
+        <useGzip>true</useGzip>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="AI"/>
+    </root>
+</configuration>
