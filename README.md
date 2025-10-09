@@ -19,19 +19,20 @@ The system implements a **message-based asynchronous architecture** designed for
 
 | Diagram Component | Description | Code Component |
 |--------------------|--------------|----------------|
-| 🖥️ **add-employee** | Client initiates a request to onboard a new employee | `EmployeeController.addEmployee()` |
+| 🖥️ **add-employee** | Client initiates a request to add the information of new employees | `EmployeeController.addEmployee()` |
 | 🔷 **employeeprocessqueue** | Azure Service Bus Queue receiving employee messages | Defined in `ServiceBusConfig.java` |
-| ⚙️ **Processor Service** | Consumes queue messages, creates records in DB | `QueueHelperServiceImpl` + `ServiceBusIntegrationService` |
+| ⚙️ **Processor Service** | send messages to employee process queue and update cache with processing status, return redis status url | `QueueHelperServiceImpl` + `CacheHelperService` |
+| ⚙️ **Receiver Application** | 	Consumes employee process queue messages, creates records in DB, update cache with processed/failed status | `SericeBusListener` |
 | 🗄️ **PostgreSQL DB** | Stores employee master data | `BasicDetailRepository` + `BasicDetails` entity |
-| 📬 **processedqueue** | Queue for downstream system notifications | Published via `QueueHelperServiceImpl` |
-| 💾 **Redis Cache** | Tracks transient processing statuses (processing/processed/failed) | `CacheHelperServiceImpl` + `RedisConfig.java` |
+| 📬 **processedqueue** | Queue for downstream system notifications | Defined in `Receiver Application` |
+| 💾 **Redis Cache** | Tracks transient processing statuses (processing/processed/failed) | `CacheHelperServiceImpl` + `RedisConfig.java` + `Receiver Application` |
 
 ---
 
 ### 🔄 Processing Flow
 
 1. **API Request**
-   - The client calls `POST /api/employees` (protected by Azure AD).
+   - The client calls `POST /add-employee` (protected by Azure AD).
    - Request payload is mapped to `CreateEmployeeRequest`.
    - API publishes the message to `employeeprocessqueue`.
    - Status is immediately cached in Redis as `"processing"`.
@@ -47,6 +48,7 @@ The system implements a **message-based asynchronous architecture** designed for
 
 4. **Status Tracking**
    - Clients can query the employee status via `/get-status?key=`.
+   - This key is provided by /add-employee API in response.
    - Redis acts as a lightweight, fast-access layer for intermediate status updates.
 
 ---
@@ -56,12 +58,12 @@ The system implements a **message-based asynchronous architecture** designed for
 | Package | Purpose |
 |----------|----------|
 | `controller` | Contains `EmployeeController` for REST APIs |
-| `service` | Declares core business contracts (`EmployeeService`, `CacheHelperService`, etc.) |
-| `service.serviceimpl` | Implements service logic including queue and cache operations |
-| `config` | Azure and Spring configurations (`ServiceBusConfig`, `DbConfig`, `RedisConfig`, `SwaggerConfig`) |
-| `dto` | Data Transfer Objects for requests/responses |
+| `service` | contains interfaces. Declares core business contracts (`EmployeeService`, `CacheHelperService`, etc.) |
+| `service.serviceimpl` | contains implementations (business logic + infra integration) |
+| `config` | Azure and database configurations (`ServiceBusConfig`, `DbConfig`, `RedisConfig`, `SwaggerConfig`) |
+| `dto` | Data Transfer Objects for requests/responses[ API Contracts between client and controller] |
 | `entity` | JPA entities mapped to PostgreSQL tables |
-| `exception` | Centralized exception handling using `GlobalExceptionHandler` |
+| `exception` | Centralized exception handling using `GlobalExceptionHandler` and some of the custom exceptions |
 | `Repository` | Spring Data repositories for DB persistence |
 
 ---
