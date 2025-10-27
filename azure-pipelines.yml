@@ -1,0 +1,67 @@
+# Gradle
+# Build your Java project and run tests with Gradle using a Gradle wrapper script.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+# - task: PowerShell@2
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       $source = "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz"
+#       $destination = "$(build.sourcesdirectory)\jdk-21_linux-x64_bin.tar.gz"
+#       $client = new-object System.Net.WebClient 
+#       $cookie = "oraclelicense=accept-securebackup-cookie"
+#       $client.Headers.Add([System.Net.HttpRequestHeader]::Cookie, $cookie) 
+#       $client.downloadFile($source, $destination)
+#   displayName: 'PowerShell Script'
+- task: JavaToolInstaller@1
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+# - task: JavaToolInstaller@1
+#   displayName: 'Use Java 21'
+#   inputs:
+#     versionSpec: '21'
+#     jdkArchitectureOption: 'x64'
+#     jdkSourceOption: 'LocalDirectory'
+#     jdkFile: '$(build.sourcesdirectory)\jdk-21_linux-x64_bin.tar.gz'
+#     jdkDestinationDirectory: '$(agent.toolsDirectory)/jdk21'
+#     cleanDestinationDirectory: true
+  
+
+- task: Gradle@4
+  inputs:
+    gradleWrapperFile: 'demo/gradlew'
+    workingDirectory: 'demo'
+    tasks: 'build'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    javaHomeOption: 'Path'
+    jdkDirectory: '$(JAVA_HOME)'
+    sonarQubeRunAnalysis: false
+    spotBugsAnalysis: false
+
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'demo/build/libs'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'FilePath'
+    TargetPath: '/demo/publish-Artifacts'
+

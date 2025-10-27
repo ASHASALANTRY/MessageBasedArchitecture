@@ -12,6 +12,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+
+
 @Service
 @RequiredArgsConstructor
 public class CacheHelperServiceImpl implements CacheHelperService {
@@ -25,7 +28,7 @@ public class CacheHelperServiceImpl implements CacheHelperService {
         try {
             ValueOperations<String, String> ops = this.stringRedisTemplate.opsForValue();
             if (!stringRedisTemplate.hasKey(key)) {
-                ops.set(key, messageStatus);
+                ops.set(key, messageStatus, Duration.ofMinutes(15));
                 log.info("added key to redis: {}", key);
                 log.info("value for key {} is: {}", key, ops.get(key));
             }

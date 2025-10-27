@@ -33,7 +33,7 @@ public class EmployeeController {
 
     @PostMapping("/add-employee")
     @Operation(summary = "add employee details", description = "save employee details and update status in cache", tags = {"Employee Details"})
-    @ApiResponses(value = {@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "employee details stored successfully")})
+    @ApiResponses(value = {@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "202", description = "employee details stored successfully")})
     public ResponseEntity<ApiResponse> addEmployeeDetails(@RequestBody EmployeesRequest employees) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setData(employeeService.addEmployeeDetails(employees));
