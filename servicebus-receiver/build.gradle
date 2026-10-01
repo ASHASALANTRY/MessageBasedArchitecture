@@ -1,0 +1,61 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.microsoft.azure.azurefunctions' version '1.16.1'
+
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+ext {
+	set('springCloudAzureVersion', "5.23.0")               // or latest
+}
+dependencyManagement {
+	imports {
+		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+	}
+}
+//configurations {
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
+//}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'com.azure:azure-identity'
+	implementation "com.azure.spring:spring-cloud-azure-starter-servicebus"   // auto-config
+	implementation "com.azure.spring:spring-messaging-azure-servicebus"       // @ServiceBusListener
+	implementation 'com.azure.spring:spring-messaging-azure-servicebus:5.23.0'  // provides @ServiceBusListener
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// Spring Cloud Azure Redis (5.x uses the Lettuce variant)
+	implementation 'com.azure.spring:spring-cloud-azure-starter-data-redis-lettuce'
+	implementation("redis.clients.authentication:redis-authx-entraid:0.1.1-beta2")
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
